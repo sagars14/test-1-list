@@ -1,0 +1,12 @@
+@use 'sass/color.scss';
+
+.main-container {
+  max-width: 80%;
+  margin: 50px 20px 50px auto;
+  .user-list {
+    display: flex;
+    .left-section {
+      width: 80%;
+    }
+  }
+}

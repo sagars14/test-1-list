@@ -1,7 +1,17 @@
 <template>
   <div class="main-container">
     <SearchBar @find="findUser($event)" />
-    <List :usersList="users" />
+    <p v-show="showMatchFound" style="text-align: center; width: 700px">
+      <span><strong>Match Found!</strong></span>
+    </p>
+    <div class="user-list">
+      <div class="left-section">
+        <List :usersList="users" />
+      </div>
+      <div class="right-section">
+          
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +29,8 @@ export default defineComponent({
   data() {
     return {
       users: [],
+      tempUsers: [],
+      tempFlag: true,
     };
   },
   mounted() {
@@ -38,10 +50,23 @@ export default defineComponent({
     this.users = [...usersData];
   },
   methods: {
-    //   findUser() {
+    findUser(uname) {
+      if (this.users && this.users.length > 0) {
+        const foundedUser = this.users.find(
+          (user) => user.name.toLowerCase() === uname.toLowerCase()
+        );
+        if (foundedUser && foundedUser !== undefined) {
+          if (this.tempFlag) this.tempUsers = [...this.users];
+          this.users = [foundedUser];
+          this.tempFlag = false;
+        }
+      }
 
-    //   }
-  }
+      if (!uname && uname === '') {
+        this.users = [...this.tempUsers];
+      }
+    },
+  },
 });
 </script>
 

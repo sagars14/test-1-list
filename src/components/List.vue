@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="user-table">
     <thead>
       <tr>
         <th>Name</th>
