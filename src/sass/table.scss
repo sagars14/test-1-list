@@ -3,15 +3,58 @@
 .main-container {
   max-width: 80%;
   margin: 50px 20px 50px auto;
-  .match-found {
+  .exact-match {
     padding: 10px 10px;
     color: white;
-    background-color: green;
+    background-color: color.$exact-match;
   }
   .user-list {
     display: flex;
     .left-section {
       width: 80%;
+    }
+    .right-section {
+      width: 20%;
+      .sort-by {
+        position: relative;
+        label {
+          width: 100%;
+          color: color.$label-color;
+          background: color.$button;
+          padding: 10px;
+          display: inline-block;
+        }
+        input {
+          position: absolute;
+          opacity: 0;
+          right: 0;
+          &:checked + label {
+            background: color.$input;
+          }
+        }
+        .sort-by-value {
+          display: inline-block;
+          position: absolute;
+          right: 10px;
+          top: 17px;
+          height: 5px;
+          width: 5px;
+          border-radius: 50%;
+          background-color: color.$dot-color;
+          color: color.$dot-color;
+        }
+        .sort-by-date {
+          display: inline-block;
+          position: absolute;
+          right: 10px;
+          top: 17px;
+          height: 5px;
+          width: 5px;
+          border-radius: 50%;
+          background-color: color.$dot-color;
+          color: color.$dot-color;
+        }
+      }
     }
   }
 }

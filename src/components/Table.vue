@@ -2,76 +2,142 @@
   <div class="main-container">
     <SearchBar
       :show-add-btn="showAddBtn"
-      @find="findUser($event)"
-      @add="addUser($event)" />
-    <p v-show="showMatchFound" style="text-align: center; width: 700px">
-      <span class="match-found"><strong>Match Found !</strong></span>
+      @add="addUser($event)"
+      @find="findUser($event)" />
+    <p v-show="showMatchFound" style="text-align: center; width: 710px">
+      <span class="exact-match"><strong> Exact Match !</strong></span>
     </p>
     <div class="user-list">
       <div class="left-section">
         <List
-          :showTable="showTable"
-          :usersList="users"
+          :users-list="users"
+          :show-table="showTable"
           @delete="deleteUser($event)" />
       </div>
-      <div class="right-section"></div>
+      <div class="right-section">
+        <div style="margin-top: 1em">
+          <div class="sort-by">
+            <input id="name" v-model="picked" type="radio" value="name" />
+            <label for="name"
+              ><span style="color: #a3a9af">Sort by</span> Value:
+              <span v-if="picked === 'name'" class="sort-by-value"></span>
+            </label>
+          </div>
+          <div class="sort-by">
+            <input id="date" v-model="picked" type="radio" value="date" />
+            <label for="date"
+              ><span style="color: #a3a9af">Sort by</span> Added Date:
+              <span v-if="picked === 'date'" class="sort-by-date"></span
+            ></label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import { defineComponent } from '@vue/runtime-core';
-import SearchBar from './SearchBar.vue';
+<script lang="ts">
+import { defineComponent } from 'vue';
 import List from './List.vue';
+import SearchBar from './SearchBar.vue';
 import moment from 'moment';
 
+interface User {
+  name: string;
+  created_at: string | Date | any;
+}
 export default defineComponent({
   name: 'Table',
-  components: {
-    SearchBar,
-    List,
-  },
-  data() {
+  components: { List, SearchBar },
+  data(): any {
     return {
-      showTable: true,
-      tempFlag: true,
       showAddBtn: false,
-      showMatchFound: false,
+      showTable: true,
       users: [],
       tempUsers: [],
+      picked: '',
     };
   },
+  watch: {
+    picked(pickedValue: string): void {
+      console.log(pickedValue);
+      if (pickedValue === 'name') {
+        this.users.sort((a: User, b: User): number => {
+          var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+          var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
+        });
+      } else {
+        console.log('sort by date');
+        this.users.sort((a: User, b: User) => {
+          return b.created_at - a.created_at;
+        });
+      }
+    },
+  },
   mounted() {
-    const usersData = [
+    const users = [
       {
         name: 'Ashish',
-        created_at: moment(moment(new Date().toString()).day(-7)),
+        created_at: moment(new Date().toString()).day(-1),
       },
-      { name: 'Rahul', created_at: moment(new Date().toString()).day(-7) },
-      { name: 'Aanand', created_at: moment(new Date().toString()).day(-6) },
-      { name: 'Rahul', created_at: moment(new Date().toString()).day(-5) },
-      { name: 'Ravi', created_at: moment(new Date().toString()).day(-4) },
-      { name: 'Pushark', created_at: moment(new Date().toString()).day(-3) },
-      { name: 'Shubham', created_at: moment(new Date().toString()).day(-2) },
-      { name: 'Ankit', created_at: moment(new Date().toString()).day(-1) },
-      { name: 'Kuldeep', created_at: moment(new Date().toString()).day(0) },
+      {
+        name: 'Rahul',
+        created_at: moment(new Date().toString()).day(-2),
+      },
+      {
+        name: 'Aanand',
+        created_at: moment(new Date().toString()).day(-3),
+      },
+      {
+        name: 'Pushark',
+        created_at: moment(new Date().toString()).day(-4),
+      },
+      {
+        name: 'Ravi',
+        created_at: moment(new Date().toString()).day(-5),
+      },
+      {
+        name: 'Himanshu',
+        created_at: moment(new Date().toString()).day(-6),
+      },
+      {
+        name: 'Deepak',
+        created_at: moment(new Date().toString()).day(-7),
+      },
+      {
+        name: 'Ankit',
+        created_at: moment(new Date().toString()).day(0),
+      },
+      {
+        name: 'Kuldeep',
+        created_at: moment(new Date().toString()),
+      },
     ];
-    window.localStorage.setItem('users', JSON.stringify(usersData));
+    window.localStorage.setItem('users', JSON.stringify(users));
     window.localStorage.getItem('users');
-    this.users = [...usersData];
+    this.users = [...users];
+    this.picked = 'name';
   },
   methods: {
-    findUser(uname) {
-      if (this.users && this.users.length > 0) {
-        const foundedUser = this.users.find(
-          (user) => user.name.toLowerCase() === uname.toLowerCase()
+    findUser(uname: string): void {
+      if (this.users.length > 0) {
+        const foundedUser = this.users?.find(
+          (user: User) => user.name.toLowerCase() === uname.toLowerCase()
         );
         if (foundedUser && foundedUser !== undefined) {
-          if (this.tempFlag) this.tempUsers = [...this.users];
+          this.tempUsers = [...this.users];
           this.users = [foundedUser];
           this.showTable = true;
           this.showAddBtn = false;
-          this.tempFlag = false;
           this.showMatchFound = true;
         } else {
           this.showMatchFound = false;
@@ -79,14 +145,15 @@ export default defineComponent({
           this.showTable = false;
         }
       }
-
       if (!uname && uname === '') {
+        console.log('uname');
         if (this.tempUsers.length > 0) this.users = [...this.tempUsers];
         this.showTable = true;
         this.showAddBtn = false;
       }
     },
-    addUser(newUser) {
+    addUser(newUser: string): void {
+      console.log('new user', newUser);
       if (newUser && newUser !== '') {
         this.users.unshift({
           name: newUser,
@@ -99,14 +166,14 @@ export default defineComponent({
         window.localStorage.setItem('users', JSON.stringify([...this.users]));
       }
     },
-    deleteUser(name) {
-      const filteredUsers = this.users.filter(
-        (user) => user.name.toLowerCase() !== name.toLowerCase()
+    deleteUser(name: string) {
+      const newUsers = this.users.filter(
+        (user: User) => user.name.toLowerCase() !== name.toLowerCase()
       );
-      this.users = [...filteredUsers];
-      this.tempUsers = [...filteredUsers];
+      this.users = [...newUsers];
+      this.tempUsers = [...newUsers];
       window.localStorage.removeItem('users');
-      window.localStorage.setItem('users', JSON.stringify([this.users]));
+      window.localStorage.setItem('users', JSON.stringify([...newUsers]));
     },
   },
 });

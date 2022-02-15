@@ -9,7 +9,7 @@
       v-show="showAddBtn"
       type="submit"
       @click="$emit('add', searchValue)">
-      Add
+      <strong>Add</strong>
     </button>
   </div>
 </template>
@@ -25,7 +25,6 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['add'],
   data() {
     return {
       searchValue: '',

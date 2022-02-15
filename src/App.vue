@@ -10,9 +10,7 @@ import Table from './components/Table.vue';
 
 export default defineComponent({
   name: 'App',
-  components: {
-    Table,
-  },
+  components: { Table },
   setup() {
     // Setup
   },
