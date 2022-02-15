@@ -3,6 +3,11 @@
 .main-container {
   max-width: 80%;
   margin: 50px 20px 50px auto;
+  .match-found {
+    padding: 10px 10px;
+    color: white;
+    background-color: green;
+  }
   .user-list {
     display: flex;
     .left-section {

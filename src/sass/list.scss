@@ -1,4 +1,27 @@
+@use 'sass/color.scss';
 
 .user-table {
-    width: 85%;
+  width: 85%;
+  tr {
+    border-bottom: 1px solid #fff;
+    td,
+    th {
+      width: 34%;
+      padding: 15px 5px;
+      button {
+        border: 0;
+        background: color.$button-bg;
+        color: color.$button;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
+      &:nth-child(2) {
+        text-align: center;
+      }
+      &:last-child {
+        padding: 0;
+        text-align: right;
+      }
+    }
+  }
 }

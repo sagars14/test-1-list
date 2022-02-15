@@ -4,6 +4,7 @@
       <tr>
         <th>Name</th>
         <th>Created Date</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -60,4 +61,6 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use 'sass/list.scss';
+</style>

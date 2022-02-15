@@ -5,7 +5,7 @@
       @find="findUser($event)"
       @add="addUser($event)" />
     <p v-show="showMatchFound" style="text-align: center; width: 700px">
-      <span><strong>Match Found!</strong></span>
+      <span class="match-found"><strong>Match Found !</strong></span>
     </p>
     <div class="user-list">
       <div class="left-section">
@@ -112,4 +112,6 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@use 'sass/table.scss';
+</style>
