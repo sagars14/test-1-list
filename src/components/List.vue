@@ -6,8 +6,17 @@
         <th>Created Date</th>
       </tr>
     </thead>
-    <tbody>
-        <tr></tr>
+    <tbody v-for="(user, i) in usersList" :key="i">
+      <tr>
+        {{
+          user.name
+        }}
+      </tr>
+      <tr>
+        {{
+          user.created_at
+        }}
+      </tr>
     </tbody>
   </table>
 </template>
@@ -17,6 +26,12 @@ import { defineComponent } from '@vue/runtime-core';
 
 export default defineComponent({
   name: 'List',
+  props: {
+    usersList: {
+      type: Array,
+      required: true,
+    },
+  },
 });
 </script>
 

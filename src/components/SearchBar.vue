@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3>Hello from SearchBar</h3>
+  <div class="search-bar">
+    <input v-model="searchValue" placeholder="Search or Add..." type="search" />
   </div>
 </template>
 
@@ -9,6 +9,16 @@ import { defineComponent } from '@vue/runtime-core';
 
 export default defineComponent({
   name: 'SearchBar',
+  data() {
+    return {
+      searchValue: '',
+    };
+  },
+  watch: {
+    searchValue() {
+      this.$emit('find', this.searchValue);
+    },
+  },
 });
 </script>
 
