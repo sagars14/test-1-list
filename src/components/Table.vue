@@ -1,16 +1,17 @@
 <template>
   <div class="main-container">
-    <SearchBar @find="findUser($event)" />
+    <SearchBar
+      :show-add-btn="showAddBtn"
+      @find="findUser($event)"
+      @add="addUser($event)" />
     <p v-show="showMatchFound" style="text-align: center; width: 700px">
       <span><strong>Match Found!</strong></span>
     </p>
     <div class="user-list">
       <div class="left-section">
-        <List :usersList="users" />
+        <List :showTable="showTable" :usersList="users" />
       </div>
-      <div class="right-section">
-          
-      </div>
+      <div class="right-section"></div>
     </div>
   </div>
 </template>
@@ -19,6 +20,7 @@
 import { defineComponent } from '@vue/runtime-core';
 import SearchBar from './SearchBar.vue';
 import List from './List.vue';
+import moment from 'moment';
 
 export default defineComponent({
   name: 'Table',
@@ -28,22 +30,28 @@ export default defineComponent({
   },
   data() {
     return {
+      showTable: true,
+      tempFlag: true,
+      showAddBtn: false,
+      showMatchFound: false,
       users: [],
       tempUsers: [],
-      tempFlag: true,
     };
   },
   mounted() {
     const usersData = [
-      { name: 'Ashish', created_at: new Date() },
-      { name: 'Rahul', created_at: new Date() },
-      { name: 'Aanand', created_at: new Date() },
-      { name: 'Rahul', created_at: new Date() },
-      { name: 'Ravi', created_at: new Date() },
-      { name: 'Pushark', created_at: new Date() },
-      { name: 'Shubham', created_at: new Date() },
-      { name: 'Ankit', created_at: new Date() },
-      { name: 'Kuldeep', created_at: new Date() },
+      {
+        name: 'Ashish',
+        created_at: moment(moment(new Date().toString()).day(-7)),
+      },
+      { name: 'Rahul', created_at: moment(new Date().toString()).day(-7) },
+      { name: 'Aanand', created_at: moment(new Date().toString()).day(-6) },
+      { name: 'Rahul', created_at: moment(new Date().toString()).day(-5) },
+      { name: 'Ravi', created_at: moment(new Date().toString()).day(-4) },
+      { name: 'Pushark', created_at: moment(new Date().toString()).day(-3) },
+      { name: 'Shubham', created_at: moment(new Date().toString()).day(-2) },
+      { name: 'Ankit', created_at: moment(new Date().toString()).day(-1) },
+      { name: 'Kuldeep', created_at: moment(new Date().toString()).day(0) },
     ];
     window.localStorage.setItem('users', JSON.stringify(usersData));
     window.localStorage.getItem('users');
@@ -58,12 +66,34 @@ export default defineComponent({
         if (foundedUser && foundedUser !== undefined) {
           if (this.tempFlag) this.tempUsers = [...this.users];
           this.users = [foundedUser];
+          this.showTable = true;
+          this.showAddBtn = false;
           this.tempFlag = false;
+          this.showMatchFound = true;
+        } else {
+          this.showMatchFound = false;
+          this.showAddBtn = true;
+          this.showTable = false;
         }
       }
 
       if (!uname && uname === '') {
-        this.users = [...this.tempUsers];
+        if (this.tempUsers.length > 0) this.users = [...this.tempUsers];
+        this.showTable = true;
+        this.showAddBtn = false;
+      }
+    },
+    addUser(newUser) {
+      if (newUser && newUser !== '') {
+        this.users.unshift({
+          name: newUser,
+          created_at: moment(new Date()),
+        });
+        this.showAddBtn = false;
+        this.showTable = true;
+        this.tempUsers = [...this.users];
+        window.localStorage.removeItem('users');
+        window.localStorage.setItem('users', JSON.stringify([...this.users]));
       }
     },
   },

@@ -1,5 +1,5 @@
 <template>
-  <table class="user-table">
+  <table v-show="showTable" class="user-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -14,7 +14,7 @@
       </tr>
       <tr>
         {{
-          user.created_at
+          formattedDate(user.created_at)
         }}
       </tr>
     </tbody>
@@ -23,6 +23,7 @@
 
 <script>
 import { defineComponent } from '@vue/runtime-core';
+import moment from 'moment';
 
 export default defineComponent({
   name: 'List',
@@ -30,6 +31,15 @@ export default defineComponent({
     usersList: {
       type: Array,
       required: true,
+    },
+    showTable: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  methods: {
+    formattedDate(date) {
+      return moment(date).fromNow();
     },
   },
 });
