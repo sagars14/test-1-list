@@ -1,24 +1,32 @@
 <template>
-  <table v-show="showTable" class="user-table">
+  <table v-if="showTable" class="user-table">
     <thead>
       <tr>
         <th>Name</th>
         <th>Created Date</th>
       </tr>
     </thead>
-    <tbody v-for="(user, i) in usersList" :key="i">
-      <tr>
-        {{
-          user.name
-        }}
-      </tr>
-      <tr>
-        {{
-          formattedDate(user.created_at)
-        }}
+    <tbody>
+      <tr
+        v-for="(user, i) in usersList"
+        :key="i"
+        @mouseover="(showDeleteBtn = true), (mouseOveredUser = i)"
+        @mouseleave="showDeleteBtn = false">
+        <td>
+          {{ user.name }}
+        </td>
+        <td>
+          {{ formattedDate(user.created_at) }}
+        </td>
+        <td v-show="showDeleteBtn && mouseOveredUser === i">
+          <button type="button" @click="$emit('delete', user.name)">
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
+  <p v-else>No user found with this name, please add</p>
 </template>
 
 <script>
@@ -36,6 +44,13 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+  },
+  emits: ['delete'],
+  data() {
+    return {
+      showDeleteBtn: false,
+      mouseOveredUser: null,
+    };
   },
   methods: {
     formattedDate(date) {

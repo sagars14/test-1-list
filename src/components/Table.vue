@@ -9,7 +9,10 @@
     </p>
     <div class="user-list">
       <div class="left-section">
-        <List :showTable="showTable" :usersList="users" />
+        <List
+          :showTable="showTable"
+          :usersList="users"
+          @delete="deleteUser($event)" />
       </div>
       <div class="right-section"></div>
     </div>
@@ -95,6 +98,15 @@ export default defineComponent({
         window.localStorage.removeItem('users');
         window.localStorage.setItem('users', JSON.stringify([...this.users]));
       }
+    },
+    deleteUser(name) {
+      const filteredUsers = this.users.filter(
+        (user) => user.name.toLowerCase() !== name.toLowerCase()
+      );
+      this.users = [...filteredUsers];
+      this.tempUsers = [...filteredUsers];
+      window.localStorage.removeItem('users');
+      window.localStorage.setItem('users', JSON.stringify([this.users]));
     },
   },
 });

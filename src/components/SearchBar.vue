@@ -25,6 +25,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['add'],
   data() {
     return {
       searchValue: '',
